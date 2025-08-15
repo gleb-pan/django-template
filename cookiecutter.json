@@ -1,0 +1,16 @@
+{
+  "project_name": "My Django Project",
+  "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '_').replace('-', '_') }}",
+  "app_name": "core",
+  "description": "Django project generated from cookiecutter template",
+  "author_name": "Your Name",
+  "python_version": "3.12",
+  "django_version": "5.1",
+  "_copy_without_render": [
+    "*.mmd",
+    "*.yaml",
+    "*.yml",
+    "*.svg",
+    "*.png"
+  ]
+}
