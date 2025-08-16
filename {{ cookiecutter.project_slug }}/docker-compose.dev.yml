@@ -1,27 +1,39 @@
-services:
-  web:
-    build:
-      context: .
-      dockerfile: backend/Dockerfile
-    env_file:
-      - backend/.env        # Django получит все переменные
-    volumes:
-      - ./backend:/app
-    ports:
-      - "8000:8000"
-    depends_on:
-      - db
-    restart: unless-stopped
+name: {{ cookiecutter.project_slug }}
 
+services:
   db:
     image: postgres:15
     env_file:
       - backend/.env
     volumes:
       - pg_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
+    # Открой порт наружу ТОЛЬКО если надо подключаться из IDE/хоста
+    # ports:
+    #   - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB || exit 1"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+      start_period: 5s
     restart: unless-stopped
+
+  web:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    env_file:
+      - backend/.env
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    # Если хочешь временно обойти entrypoint и глянуть трейс:
+    # command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 
 volumes:
   pg_data:

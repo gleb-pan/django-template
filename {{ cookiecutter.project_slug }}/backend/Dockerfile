@@ -13,9 +13,24 @@ WORKDIR /app
 # Кладём только requirements для кэша
 COPY backend/requirements /app/requirements
 
-# Установим pip, pip-tools и базовые зависимости (только base.txt — dev.txt не тащим в образ)
-RUN python -m pip install --upgrade pip setuptools wheel pip-tools && \
-    pip install -r /app/requirements/base.txt
+# pip + инструменты для компиляции pyproject → requirements
+# (pip-tools свежий, плюс build/pyproject_hooks/packaging)
+RUN python -m pip install --upgrade pip setuptools wheel \
+ && python -m pip install "pip-tools>=7.4" build pyproject_hooks packaging
+
+# Диагностика (можешь удалить потом)
+RUN ls -la /app/requirements || true \
+ && ( [ -f /app/requirements/pyproject.toml ] && head -n 20 /app/requirements/pyproject.toml || echo "NO pyproject.toml in /app/requirements" )
+
+# ВАЖНО: компилим из той директории, где лежит pyproject.toml
+RUN if [ -f /app/requirements/pyproject.toml ]; then \
+        cd /app/requirements && pip-compile --resolver=backtracking pyproject.toml -o base.txt ; \
+    else \
+        echo "ERROR: /app/requirements/pyproject.toml not found — either add it, or commit base.txt" && exit 1 ; \
+    fi
+
+# Ставим зависимости
+RUN pip install -r /app/requirements/base.txt
 
 # Кладём весь backend (код монтируем томом в compose, но базово пусть будет)
 COPY backend /app

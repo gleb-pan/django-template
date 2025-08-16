@@ -1,9 +1,0 @@
-[project]
-name = "temp-seed"
-version = "0.1.0"
-requires-python = ">=3.12"
-dependencies = [
-  "Django>=5.1,<5.2",
-  "psycopg2>=2.9,<3.0",
-  "python-dotenv>=1.0,<2.0",
-]
