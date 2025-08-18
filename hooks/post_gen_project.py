@@ -37,6 +37,7 @@ def main():
 
         # 2) Сгенерили значения без '$'
         secret_key = gen_safe_string(64)
+
         pg_password = gen_safe_string(24)
 
         # 3) Подставили
@@ -44,13 +45,16 @@ def main():
         contents = replace_line(contents, "SECRET_KEY", secret_key)
         contents = replace_line(contents, "POSTGRES_PASSWORD", pg_password)
 
+        print(f"\nDjango secret key: {secret_key}")
+        print(f"PostgreSQL password: {pg_password}\n")
+        print(f"YOU CAN CHANGE AUTOMATICALLY GENERATED CREDENTIALS IN 'project_name/backend/.env'\n")
+
         # На всякий случай: если DEBUG пустой — выставим 1 (dev-значение)
         if re.search(r"(?m)^DEBUG\s*=\s*$", contents):
             contents = replace_line(contents, "DEBUG", "1")
+            print('DEBUG has been set to TRUE')
 
         ENV_FILE.write_text(contents, encoding="utf-8")
-
-        print("INFO: backend/.env generated successfully (no '$' in secrets).")
 
         # Git hygiene: убедимся, что .env в .gitignore
         gi = ROOT / ".gitignore"

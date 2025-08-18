@@ -36,7 +36,7 @@ RUN pip install -r /app/requirements/base.txt
 COPY backend /app
 
 # На dev хотим settings.dev, а env придёт через compose (env_file)
-ENV DJANGO_SETTINGS_MODULE={{ cookiecutter.project_slug }}.settings.dev \
+ENV DJANGO_SETTINGS_MODULE=config.settings.dev \
     PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 

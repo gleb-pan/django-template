@@ -18,7 +18,7 @@ BASE_DIR = Path(__file__).resolve().parent
 load_dotenv(BASE_DIR / ".env")
 
 os.environ.setdefault(
-    "DJANGO_SETTINGS_MODULE", "{{ cookiecutter.project_slug }}.settings.prod"
+    "DJANGO_SETTINGS_MODULE", "config.settings.prod"
 )
 
 application = get_wsgi_application()

@@ -16,12 +16,11 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import path
 from django.views.generic import RedirectView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("health/", include("core.urls")),  # если health в core
     path("", RedirectView.as_view(url="/admin/", permanent=False)),  # ← корень
-    path("favicon.ico", RedirectView.as_view(url="/static/favicon.ico", permanent=True)),
+    path("favicon.ico", RedirectView.as_view(url="../static/favicon.ico", permanent=True)),
 ]

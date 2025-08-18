@@ -17,7 +17,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "{{ cookiecutter.app_name }}",
 ]
 
 MIDDLEWARE = [
@@ -30,7 +29,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "{{ cookiecutter.project_slug }}.urls"
+ROOT_URLCONF = "config.urls"
 
 TEMPLATES = [
     {
@@ -47,7 +46,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "{{ cookiecutter.project_slug }}.wsgi.application"
+WSGI_APPLICATION = "config.wsgi.application"
 
 # БД: по умолчанию SQLite (чтобы всё взлетало сходу),
 # но сразу поддерживаем Postgres через ENV без правок кода.
